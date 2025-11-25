@@ -560,6 +560,8 @@ public class BankTransactions
                     }
                     else
                     {
+                        messages.Add($"Time Stamp - Actions - Amount");
+                        messages.Add("");
                         foreach (var transact in acc.Transactions)
                         {
                             messages.Add($"{transact.timeStamp} - {transact.transactionType} - ₱{transact.amount}");
