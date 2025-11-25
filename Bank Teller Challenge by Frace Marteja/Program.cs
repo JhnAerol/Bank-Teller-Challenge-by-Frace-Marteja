@@ -504,6 +504,84 @@ public class BankTransactions
         }
     }
 
+    //public void ViewTransactions()
+    //{
+    //    Console.Clear();
+    //    Console.WriteLine(Program.Title());
+
+    //    Console.WriteLine("1. Teller Transaction");
+    //    Console.WriteLine("2. Customer Transaction");
+    //    Console.Write("Select option: ");
+    //    string pick = Console.ReadLine();
+
+    //    List<string> messages = new List<string>();
+
+    //    switch (pick)
+    //    {
+    //        case "1":
+    //            Console.Clear();
+    //            Console.WriteLine(Program.Title());
+    //            if (Teller.Transactions.Count == 0)
+    //            {
+    //                messages.Add("No teller transactions found.");
+    //            }
+    //            else
+    //            {
+    //                messages.Add($"Time Stamp - Actions - Amount - Account Name");
+    //                messages.Add("");
+    //                foreach (var transact in Teller.Transactions)
+    //                {
+    //                    messages.Add($"{transact.timeStamp} - {transact.actions} - ₱{transact.amount} - {transact.accountName}");
+    //                }
+    //            }
+    //            DisplayBox(messages);
+    //            break;
+    //        case "2":
+    //            Console.Clear();
+    //            Console.WriteLine(Program.Title());
+    //            Console.Write("Enter Name of the Account: ");
+    //            string? name = Console.ReadLine();
+
+    //            if (string.IsNullOrWhiteSpace(name))
+    //            {
+    //                messages.Add("Name cannot be empty.");
+    //            }
+    //            else
+    //            {
+    //                CustomerAccounts acc = Initializes.customers.FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+    //                if (acc == null)
+    //                {
+    //                    messages.Add($"No account found with the name '{name}'.");
+    //                }
+    //                else if (acc.Transactions.Count == 0)
+    //                {
+    //                    messages.Add("No transactions found for this account.");
+    //                }
+    //                else
+    //                {
+    //                    messages.Add($"Time Stamp - Actions - Amount");
+    //                    messages.Add("");
+    //                    foreach (var transact in acc.Transactions)
+    //                    {
+    //                        messages.Add($"{transact.timeStamp} - {transact.transactionType} - ₱{transact.amount}");
+    //                    }
+    //                }
+    //            }
+    //            DisplayBox(messages);
+    //            break;
+    //        default:
+    //            Console.Clear();
+    //            Console.WriteLine(Program.Title());
+    //            messages.Add("Invalid option selected.");
+    //            DisplayBox(messages);
+    //            break;
+    //    }
+
+    //    Console.Write("Press any key to continue...");
+    //    Console.ReadKey();
+    //}
+
     public void ViewTransactions()
     {
         Console.Clear();
@@ -514,8 +592,6 @@ public class BankTransactions
         Console.Write("Select option: ");
         string pick = Console.ReadLine();
 
-        List<string> messages = new List<string>();
-
         switch (pick)
         {
             case "1":
@@ -523,18 +599,13 @@ public class BankTransactions
                 Console.WriteLine(Program.Title());
                 if (Teller.Transactions.Count == 0)
                 {
-                    messages.Add("No teller transactions found.");
+                    List<string> noTellerMsg = new List<string> { "No teller transactions found." };
+                    DisplayBox(noTellerMsg);
                 }
                 else
                 {
-                    messages.Add($"Time Stamp - Actions - Amount - Account Name");
-                    messages.Add("");
-                    foreach (var transact in Teller.Transactions)
-                    {
-                        messages.Add($"{transact.timeStamp} - {transact.actions} - ₱{transact.amount} - {transact.accountName}");
-                    }
+                    DisplayTellerTransactionTable(Teller.Transactions);
                 }
-                DisplayBox(messages);
                 break;
             case "2":
                 Console.Clear();
@@ -544,7 +615,8 @@ public class BankTransactions
 
                 if (string.IsNullOrWhiteSpace(name))
                 {
-                    messages.Add("Name cannot be empty.");
+                    List<string> emptyMsg = new List<string> { "Name cannot be empty." };
+                    DisplayBox(emptyMsg);
                 }
                 else
                 {
@@ -552,34 +624,102 @@ public class BankTransactions
 
                     if (acc == null)
                     {
-                        messages.Add($"No account found with the name '{name}'.");
+                        List<string> notFoundMsg = new List<string> { $"No account found with the name '{name}'." };
+                        DisplayBox(notFoundMsg);
                     }
                     else if (acc.Transactions.Count == 0)
                     {
-                        messages.Add("No transactions found for this account.");
+                        List<string> noTransMsg = new List<string> { "No transactions found for this account." };
+                        DisplayBox(noTransMsg);
                     }
                     else
                     {
-                        messages.Add($"Time Stamp - Actions - Amount");
-                        messages.Add("");
-                        foreach (var transact in acc.Transactions)
-                        {
-                            messages.Add($"{transact.timeStamp} - {transact.transactionType} - ₱{transact.amount}");
-                        }
+                        DisplayCustomerTransactionTable(acc.Transactions, acc.Balance);
                     }
                 }
-                DisplayBox(messages);
                 break;
             default:
                 Console.Clear();
                 Console.WriteLine(Program.Title());
-                messages.Add("Invalid option selected.");
-                DisplayBox(messages);
+                List<string> invalidMsg = new List<string> { "Invalid option selected." };
+                DisplayBox(invalidMsg);
                 break;
         }
 
         Console.Write("Press any key to continue...");
         Console.ReadKey();
+    }
+
+    private void DisplayTellerTransactionTable(List<TellerTransaction> transactions)
+    {
+        int count = transactions.Count;
+        Console.WriteLine($"All Transactions (Count: {count})");
+        Console.WriteLine();
+
+        int dateTimeWidth = 35;
+        int typeWidth = 25;
+        int amountWidth = 20;
+        int accountWidth = 27;
+
+        string horizontalLine = new string('-', Console.WindowWidth);
+        Console.WriteLine(horizontalLine);
+
+        Console.WriteLine($"| {CenterText("Date Time", dateTimeWidth)} | {CenterText("Type", typeWidth)} | {CenterText("Amount", amountWidth)} | {CenterText("Account Name", accountWidth)} |");
+        Console.WriteLine(horizontalLine);
+
+        foreach (var transact in transactions)
+        {
+            string dateTime = transact.timeStamp.ToString("MM/dd/yyyy hh:mm:ss tt");
+            string type = transact.actions;
+            string amount = $"₱{transact.amount:N2}";
+            string accountName = transact.accountName;
+
+            Console.WriteLine($"| {CenterText(dateTime, dateTimeWidth)} | {CenterText(type, typeWidth)} | {CenterText(amount, amountWidth)} | {CenterText(accountName, accountWidth)} |");
+        }
+
+        Console.WriteLine(horizontalLine);
+        Console.WriteLine();
+    }
+
+    private void DisplayCustomerTransactionTable(List<Transaction> transactions, decimal balance)
+    {
+        int count = transactions.Count;
+        Console.WriteLine($"All Transactions (Balance: ₱{balance:N2})");
+        Console.WriteLine();
+
+        int dateTimeWidth = 40;
+        int typeWidth = 40;
+        int amountWidth = 30;
+
+        string horizontalLine = new string('-', Console.WindowWidth);
+        Console.WriteLine(horizontalLine);
+
+        Console.WriteLine($"| {CenterText("Date Time", dateTimeWidth)} | {CenterText("Type", typeWidth)} | {CenterText("Amount", amountWidth)} |");
+        Console.WriteLine(horizontalLine);
+
+        foreach (var transact in transactions)
+        {
+            string dateTime = transact.timeStamp.ToString("MM/dd/yyyy hh:mm:ss tt");
+            string type = transact.transactionType.ToString();
+            string amount = $"₱{transact.amount:N2}";
+
+            Console.WriteLine($"| {CenterText(dateTime, dateTimeWidth)} | {CenterText(type, typeWidth)} | {CenterText(amount, amountWidth)} |");
+        }
+
+        Console.WriteLine(horizontalLine);
+        Console.WriteLine($"Transaction Count: {count}");
+        Console.WriteLine();
+    }
+
+    private string CenterText(string text, int width)
+    {
+        if (text.Length >= width)
+            return text.Substring(0, width);
+
+        int leftPadding = (width - text.Length) / 2;
+        int rightPadding = width - text.Length - leftPadding;
+
+        return new string(' ', leftPadding) + text + new string(' ', rightPadding);
     }
 
     public decimal ReadDecimal(string message)
