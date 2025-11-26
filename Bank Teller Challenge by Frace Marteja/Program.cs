@@ -234,6 +234,8 @@ public class BankTransactions
             
             Console.Clear();
             Console.WriteLine(Program.Title());
+            Console.WriteLine("You Select: Create an Account");
+            Console.WriteLine();
             Console.Write("Enter Name: ");
             string name = Console.ReadLine();
 
@@ -294,6 +296,8 @@ public class BankTransactions
 
         Console.Clear();
         Console.WriteLine(Program.Title());
+        Console.WriteLine("You Select: Check Balance");
+        Console.WriteLine();
         Console.Write("Enter Name of the Account: ");
         string? name = Console.ReadLine();
 
@@ -338,6 +342,9 @@ public class BankTransactions
         Console.Clear();
         Console.WriteLine(Program.Title());
 
+        Console.WriteLine("You Select: List of Account");
+        Console.WriteLine();
+
         if (Initializes.customers.Count > 0)
         {
             foreach (var list in Initializes.customers)
@@ -363,6 +370,8 @@ public class BankTransactions
 
             Console.Clear();
             Console.WriteLine(Program.Title());
+            Console.WriteLine("You Select: Deposit");
+            Console.WriteLine();
             Console.Write("Enter Name of the Account: ");
             string? name = Console.ReadLine();
 
@@ -432,6 +441,8 @@ public class BankTransactions
 
             Console.Clear();
             Console.WriteLine(Program.Title());
+            Console.WriteLine("You Select: Withdraw");
+            Console.WriteLine();
             Console.Write("Enter Name of the Account: ");
             string? name = Console.ReadLine();
 
@@ -508,6 +519,8 @@ public class BankTransactions
     {
         Console.Clear();
         Console.WriteLine(Program.Title());
+        Console.WriteLine("You Select: View Transaction");
+        Console.WriteLine();
 
         Console.WriteLine("1. Teller Transaction");
         Console.WriteLine("2. Customer Transaction");
@@ -526,6 +539,8 @@ public class BankTransactions
                 }
                 else
                 {
+                    Console.WriteLine(CenterText($"Transactions for Teller", 125));
+                    Console.WriteLine();
                     DisplayTellerTransactionTable(Teller.Transactions);
                 }
                 break;
@@ -534,6 +549,9 @@ public class BankTransactions
                 Console.WriteLine(Program.Title());
                 Console.Write("Enter Name of the Account: ");
                 string? name = Console.ReadLine();
+
+                Console.Clear();
+                Console.WriteLine(Program.Title());
 
                 if (string.IsNullOrWhiteSpace(name))
                 {
@@ -556,6 +574,9 @@ public class BankTransactions
                     }
                     else
                     {
+
+                        Console.WriteLine(CenterText($"Transactions for {name}", 125));
+                        Console.WriteLine();
                         DisplayCustomerTransactionTable(acc.Transactions, acc.Balance);
                     }
                 }
@@ -583,7 +604,7 @@ public class BankTransactions
         int amountWidth = 20;
         int accountWidth = 27;
 
-        string horizontalLine = new string('-', Console.WindowWidth);
+        string horizontalLine = new string('\u2014', Console.WindowWidth);
         Console.WriteLine(horizontalLine);
 
         Console.WriteLine($"| {CenterText("Date Time", dateTimeWidth)} | {CenterText("Type", typeWidth)} | {CenterText("Amount", amountWidth)} | {CenterText("Account Name", accountWidth)} |");
@@ -606,16 +627,16 @@ public class BankTransactions
     private void DisplayCustomerTransactionTable(List<Transaction> transactions, decimal balance)
     {
         int count = transactions.Count;
-        Console.WriteLine($"All Transactions (Balance: ₱{balance:N2})");
+        Console.WriteLine(CenterText($"(Balance: ₱{balance:N2})", 125));
         Console.WriteLine();
 
         int dateTimeWidth = 40;
         int typeWidth = 40;
         int amountWidth = 30;
 
-        string horizontalLine = new string('-', Console.WindowWidth);
+        string horizontalLine = new string('\u2014', Console.WindowWidth);
         Console.WriteLine(horizontalLine);
-
+        
         Console.WriteLine($"| {CenterText("Date Time", dateTimeWidth)} | {CenterText("Type", typeWidth)} | {CenterText("Amount", amountWidth)} |");
         Console.WriteLine(horizontalLine);
 
@@ -670,7 +691,7 @@ public class BankTransactions
         int windowWidth = Console.WindowWidth;
         int boxWidth = windowWidth;
 
-        Console.WriteLine(new string('-', boxWidth));
+        Console.WriteLine(new string('\u2014', boxWidth));
 
         foreach (var msg in messages)
         {
@@ -681,7 +702,7 @@ public class BankTransactions
             Console.WriteLine($"|{new string(' ', leftPadding)}{displayMsg}{new string(' ', rightPadding)}|");
         }
 
-        Console.WriteLine(new string('-', boxWidth));
+        Console.WriteLine(new string('\u2014', boxWidth));
         Console.WriteLine();
     }
 }
