@@ -23,7 +23,6 @@ public class Program
 
         while (true)
         {
-
             if (ShowLoginForm())
             {
                 Navi();
@@ -68,7 +67,7 @@ public class Program
 
             if (keyInfo.Key == ConsoleKey.Backspace && password.Length > 0)
             {
-                password = password[..^1];
+                password = password.Substring(0, password.Length - 1);
                 Console.Write("\b \b");
             }
             else if (!char.IsControl(keyInfo.KeyChar))

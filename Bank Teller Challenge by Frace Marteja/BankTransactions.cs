@@ -27,20 +27,23 @@ namespace Bank_Teller_Challenge_by_Frace_Marteja
         {
             while (true)
             {
-                Console.Clear();
-                Console.WriteLine(UIandValidations.Title());
-                Console.WriteLine("You Select: Create an Account\n");   
+                
+                Console.WriteLine("You Select: Create an Account\n");
 
-                Console.Write("Enter Name: ");
-                string? name = Console.ReadLine();
-
-                if (string.IsNullOrWhiteSpace(name))
+                var name = UIandValidations.GetValidAccountName();
+                if (name == null)
                 {
-                    UIandValidations.ShowMessage("Name can't be empty");
-                    continue;
+                    if (UIandValidations.AskRepeat("Do you want to continue?"))
+                    {
+                        Console.Clear();
+                        Console.WriteLine(UIandValidations.Title());
+                        continue;
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
-
-                decimal amount = UIandValidations.ReadDecimal("Enter First Deposit: ");
 
                 if (Initializes.customers.Any(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
                 {
@@ -48,6 +51,7 @@ namespace Bank_Teller_Challenge_by_Frace_Marteja
                     continue;
                 }
 
+                decimal amount = UIandValidations.ReadDecimal("Enter First Deposit: ");
 
                 var acc = new CustomerAccounts(name, amount);
                 var teller = new Teller();
@@ -57,8 +61,16 @@ namespace Bank_Teller_Challenge_by_Frace_Marteja
                 Initializes.customers.Add(acc);
 
                 UIandValidations.ShowMessage("Created Successfully!");
-                
-                if (!UIandValidations.AskRepeat("Do you want to create another account?")) break;
+
+                if (!UIandValidations.AskRepeat("Do you want to create another account?"))
+                {
+                    break;
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine(UIandValidations.Title());
+                }
             }
         }
         
