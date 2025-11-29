@@ -10,7 +10,7 @@ namespace Bank_Teller_Challenge_by_Frace_Marteja
     {
         public string Name { get; set; }
         public decimal Balance { get; set; }
-        public List<Transaction> Transactions { get; set; } = new List<Transaction>();
+        public List<CustomerTransaction> Transactions { get; set; } = new List<CustomerTransaction>();
 
         public CustomerAccounts(string _name, decimal _balance)
         {
@@ -18,7 +18,7 @@ namespace Bank_Teller_Challenge_by_Frace_Marteja
             Balance = _balance;
         }
 
-        public void AddTransaction(Transaction transact)
+        public void AddTransaction(CustomerTransaction transact)
         {
             Transactions.Add(transact);
         }

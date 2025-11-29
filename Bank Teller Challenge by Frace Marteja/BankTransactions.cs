@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Bank_Teller_Challenge_by_Frace_Marteja
 {
@@ -26,6 +27,8 @@ namespace Bank_Teller_Challenge_by_Frace_Marteja
         {
             while (true)
             {
+                Console.Clear();
+                Console.WriteLine(UIandValidations.Title());
                 Console.WriteLine("You Select: Create an Account\n");   
 
                 Console.Write("Enter Name: ");
@@ -50,16 +53,15 @@ namespace Bank_Teller_Challenge_by_Frace_Marteja
                 var teller = new Teller();
 
                 teller.AddTransaction(new TellerTransaction(DateTime.Now, "Creating an Account", amount, name));
-                acc.AddTransaction(new Transaction(DateTime.Now, TransactionType.Deposit, amount));
+                acc.AddTransaction(new CustomerTransaction(DateTime.Now, TransactionType.Deposit, amount));
                 Initializes.customers.Add(acc);
 
                 UIandValidations.ShowMessage("Created Successfully!");
-
+                
                 if (!UIandValidations.AskRepeat("Do you want to create another account?")) break;
             }
         }
         
-
         public void CheckBalance()
         {
             while (true)
@@ -141,8 +143,8 @@ namespace Bank_Teller_Challenge_by_Frace_Marteja
                 var result = process(acc, amount);
                 if (result.StartsWith("Withdrawal successful") || result.StartsWith("Deposit successful"))
                 {
-                    new Teller().AddTransaction(new TellerTransaction(DateTime.Now, $"{type} from an Account", amount, name));
-                    acc.AddTransaction(new Transaction(DateTime.Now,
+                    new Teller().AddTransaction(new TellerTransaction(DateTime.Now, type == "Deposit" ? $"{type} to an Account" : $"{type} from an Account", amount, name));
+                    acc.AddTransaction(new CustomerTransaction(DateTime.Now,
                         type == "Deposit" ? TransactionType.Deposit : TransactionType.Withdraw, amount));
                 }
 
@@ -228,7 +230,6 @@ namespace Bank_Teller_Challenge_by_Frace_Marteja
             DisplayCustomerTransactionTable(acc.Transactions, acc.Balance);
         }
 
-
         private void DisplayTellerTransactionTable(List<TellerTransaction> transactions)
         {
             int count = transactions.Count;
@@ -260,7 +261,7 @@ namespace Bank_Teller_Challenge_by_Frace_Marteja
             Console.WriteLine();
         }
 
-        private void DisplayCustomerTransactionTable(List<Transaction> transactions, decimal balance)
+        private void DisplayCustomerTransactionTable(List<CustomerTransaction> transactions, decimal balance)
         {
             int count = transactions.Count;
             Console.WriteLine(UIandValidations.CenterText($"(Balance: ₱{balance:N2})", 125));
