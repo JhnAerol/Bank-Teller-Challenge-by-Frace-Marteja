@@ -1,6 +1,6 @@
 ﻿public enum TransactionType
 {
-    CreateAccount,
+    CreateAccount, 
     CheckBalance, 
     Deposit,
     Withdraw,

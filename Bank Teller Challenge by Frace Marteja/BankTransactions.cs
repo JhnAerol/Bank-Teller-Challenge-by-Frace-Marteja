@@ -27,7 +27,6 @@ namespace Bank_Teller_Challenge_by_Frace_Marteja
         {
             while (true)
             {
-                
                 Console.WriteLine("You Select: Create an Account\n");
 
                 var name = UIandValidations.GetValidAccountName();
@@ -62,15 +61,12 @@ namespace Bank_Teller_Challenge_by_Frace_Marteja
 
                 UIandValidations.ShowMessage("Created Successfully!");
 
-                if (!UIandValidations.AskRepeat("Do you want to create another account?"))
-                {
-                    break;
-                }
-                else
+                if(UIandValidations.AskRepeat("Do you want to create another account?"))
                 {
                     Console.Clear();
                     Console.WriteLine(UIandValidations.Title());
                 }
+                break;
             }
         }
         
@@ -82,7 +78,7 @@ namespace Bank_Teller_Challenge_by_Frace_Marteja
 
                 var name = UIandValidations.GetValidAccountName();
                 if (name == null) continue;
-
+                    
                 var acc = UIandValidations.FindAccount(name);
                 if (acc == null)
                 {
@@ -143,7 +139,6 @@ namespace Bank_Teller_Challenge_by_Frace_Marteja
                         return;
                     }
                 }
-                
 
                 decimal amount = UIandValidations.ReadDecimal($"Enter {type} Amount: ");
                 if (amount <= 0)
